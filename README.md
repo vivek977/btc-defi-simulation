@@ -168,14 +168,4 @@ Feel free to submit pull requests or open issues if you find bugs or want to add
 
 ---
 
-📜 License
 
-This project is released under the MIT License. See the LICENSE file for details.
-"""
-
-# Write the content to a .txt file
-file_path = '/mnt/data/README.txt'
-with open(file_path, 'w') as f:
-    f.write(readme_content)
-
-file_path
