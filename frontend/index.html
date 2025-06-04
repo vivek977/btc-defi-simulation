@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BTC DeFi Simulator</title>
+</head>
+<body>
+  <h1>BTC-Backed DeFi Simulator</h1>
+  <button id="connectBtn">Connect MetaMask</button>
+  <div id="account"></div>
+
+  <h2>Actions</h2>
+  <button id="simulateBtn">Check WBTC Balance</button>
+  <button id="depositBtn">Deposit 1 WBTC to Aave</button>
+  <button id="borrowBtn">Borrow 100 DAI</button>
+  <button id="yieldBtn">Deposit 100 DAI into Yearn</button>
+  <button id="healthBtn">Check Health Factor</button>
+  <button id="repayBtn">Repay 100 DAI & Withdraw WBTC</button>
+
+  <pre id="output"></pre>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5/dist/ethers.min.js"></script>
+  <script>
+    let provider, signer, userAddress;
+
+    document.getElementById("connectBtn").onclick = async () => {
+      if (!window.ethereum) {
+        alert("Install MetaMask first");
+        return;
+      }
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      signer = provider.getSigner();
+      userAddress = await signer.getAddress();
+      document.getElementById("account").innerText = `Connected: ${userAddress}`;
+      log(`🔗 Connected as ${userAddress}`);
+    };
+
+    function log(msg) {
+      const out = document.getElementById("output");
+      out.innerText += msg + "\n";
+    }
+
+    const hardhatURL = "http://localhost:8545";
+    let hhProvider = new ethers.providers.JsonRpcProvider(hardhatURL);
+
+    document.getElementById("simulateBtn").onclick = async () => {
+      try {
+        await hhProvider.send("hardhat_impersonateAccount", ["0xF977814e90dA44bFA03b6295A0616a897441aceC"]);
+        const wbtc = new ethers.Contract(
+          "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+          ["function balanceOf(address) view returns (uint256)"],
+          hhProvider
+        );
+        const balance = await wbtc.balanceOf("0xF977814e90dA44bFA03b6295A0616a897441aceC");
+        log(`Whale WBTC Balance: ${ethers.utils.formatUnits(balance, 8)} WBTC`);
+      } catch (e) {
+        log(e);
+      }
+    };
+  </script>
+</body>
+</html>

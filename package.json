@@ -1,0 +1,21 @@
+{
+  "name": "btc-defi-simulation",
+  "version": "1.0.0",
+  "description": "Simulation environment for BTC-backed DeFi strategy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "hardhat compile"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.0",
+    "hardhat": "^2.24.1"
+  },
+  "dependencies": {
+    "ethers": "^5.7.2"
+  },
+  "type": "commonjs"
+}
